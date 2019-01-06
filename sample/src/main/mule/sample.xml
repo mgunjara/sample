@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="a994c154-cfc8-489a-bc24-cce1593cda53" >
+		<http:listener-connection host="0.0.0.0" port="8085" />
+	</http:listener-config>
+	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="d833d0de-d8b4-44a4-a920-872477dbb1a6" >
+		<http:request-connection host="localhost" port="8085" />
+	</http:request-config>
+	<flow name="sampleFlow" doc:id="845853aa-6537-42e9-8458-99afb13e0f0b" >
+		<http:listener doc:name="Listener" doc:id="a8b50543-969e-4f96-9117-7d7e4695f7f4" config-ref="HTTP_Listener_config" path="/hello">
+			<http:response reasonPhrase="Success">
+			</http:response>
+		</http:listener>
+		<set-payload value="Hello" doc:name="Set Payload" doc:id="a3d32e95-8a06-4260-8658-1e9dfc751738" />
+		<logger level="INFO" doc:name="Logger" doc:id="7f41e72d-cfe2-43ed-8ad1-42d6e9c286b2" message="Hello!"/>
+	</flow>
+	<flow name="secondFLow" doc:id="945fa2b8-529a-4ba5-a227-fe07e0fffb2b" >
+		<http:listener doc:name="Listener" doc:id="adf1cc06-e5c5-44af-a796-91b0bf612814" config-ref="HTTP_Listener_config" path="/secondflow"/>
+		<set-payload value="Second Flow" doc:name="Set Payload" doc:id="b1a5a8c2-eb6f-4301-bd84-0927216ab37d" />
+		<http:request method="GET" doc:name="GET /second" doc:id="177472ab-0221-4ff2-a718-6adf353fa2bb" config-ref="HTTP_Request_configuration" path="/second" responseTimeout="300000"/>
+		<logger level="INFO" doc:name="Logger" doc:id="ced435d9-0f4c-41ca-aa68-0f4d2ee21bec" />
+	</flow>
+</mule>
